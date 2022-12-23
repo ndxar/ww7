@@ -8,7 +8,7 @@ Inspirado en [thoughts.page](https://thoughts.page/) y [Wesley's Notebook](https
 ---
 
 To-Do
-- [x] Hello-wordear en ww7.ndx.ar
+- [x] Hello-worldear en ww7.ndx.ar
 - [ ] Crear db
 - [ ] Sistema login/sign-up
 - [ ] Sistema de posteo
