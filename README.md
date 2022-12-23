@@ -1,9 +1,11 @@
 # Wacky Website 7
-## Proyecto final para PCI
+Proyecto final para PCI
 
 Plataforma de blogging hecha en Python utilizando Flask.
 
-La idea es presentar una interfaz sencilla de utilizar y entender, inspirada en [thoughts.page](https://thoughts.page/) y [Wesley's Notebook](https://notebook.wesleyac.com/), para ofrecer la oportunidad de publicar entradas a un blog personal 
+Inspirado en [thoughts.page](https://thoughts.page/) y [Wesley's Notebook](https://notebook.wesleyac.com/).
+
+---
 
 To-Do
 - [x] Hello-wordear en ww7.ndx.ar
