@@ -18,3 +18,10 @@ To-Do
 - - [ ] Markdown personalizado
 - - [ ] Colores y fuentes
 - - [ ] Orden personalizado de las entradas
+
+
+---
+Dependencias
+- flask
+- Flask-SQLAlchemy
+- flask-login
