@@ -1,6 +1,6 @@
-from flask import Blueprint, render_template, request, flash, redirect, url_for
+from flask import Blueprint, render_template, request, flash, redirect, url_for, get_flashed_messages
 from .models import User
-from . import db
+from . import db, views
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -15,7 +15,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user:
-            if check_password_hash(user.password, password):
+            if check_password_hash(user.passwordHash, password):
                 flash('Logeado', category='success')
                 login_user(user, remember=True)
                 return redirect(url_for('views.home'))
@@ -24,9 +24,9 @@ def login():
         else:
             flash('email no existe', category='error')
             
+    get_flashed_messages()
 
-
-    return render_template('login.html')
+    return render_template('login.html', user=current_user)
 
 @auth.route('/signup', methods=['GET','POST'])
 def signup():
@@ -51,22 +51,22 @@ def signup():
         elif len(password1) < 10:
             flash('Pass muy corta', category='error')
         else:
-            new_user = User(email=email, username=username, password=generate_password_hash(password1,method='SHA256'))
+            new_user = User(email=email, username=username, passwordHash=generate_password_hash(password1,method='SHA256'))
             db.session.add(new_user)
             db.session.commit()
 
             login_user(new_user, remember=True)
 
             flash('User creado')
-            return redirect(url_for(views.home))
+            return redirect(url_for('views.home'))
 
 
 
 
-    return render_template('signup.html')
+    return render_template('signup.html', user=current_user)
 
 @auth.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return render_template('logout.html')
+    return render_template('logout.html', user=current_user)

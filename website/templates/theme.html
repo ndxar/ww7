@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Theme
+{% endblock %}
+
+
+{% block content %}
+
+
+
+<form method="POST">
+    <div align="center">
+        <h1>Theme</h1>
+
+        <p>index theme</p>
+        <textarea name="userTheme" id="userTheme" class="form-control" rows="30">
+{{ user.userTheme }}
+        </textarea>
+        <br />
+
+        <p>post theme</p>
+        <textarea name="postTheme" id="postTheme" class="form-control" rows="30">
+{{ user.postTheme }}
+        </textarea>
+        <br />
+        <button type="submit">Update!</button>
+    </div>
+</form>
+
+{% endblock %}

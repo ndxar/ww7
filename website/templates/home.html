@@ -9,4 +9,27 @@ Home
 
 <h1>Home!!!</h1>
 
+HOLA :DDD
+
+<div id="posts">
+
+    {% for post in posts %}
+        <div id="post-{{post.id}}">
+
+            <div id="post-author">
+                <a href="/~{{ post.user.username }}"> {{ post.user.username }} </a>
+            </div>
+
+            <div id="post-content">
+                {{ post.content }}
+            </div>
+
+            <div id="post-date">
+                {{ post.creationDate }}
+            </div>
+        </div>
+    {% endfor %}
+
+</div>
+
 {% endblock %}
