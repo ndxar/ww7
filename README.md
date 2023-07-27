@@ -25,3 +25,4 @@ Dependencias
 - flask
 - Flask-SQLAlchemy
 - flask-login
+- markdown
