@@ -1,0 +1,23 @@
+#menu a {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: white;
+    border: 3px solid black;
+    color: black;
+    text-decoration: none;
+  }
+
+  .settingsrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .settingsrow input {
+    width: 50%;
+    box-sizing: content-box;
+  }
+
+  .settingsrow label {
+    margin-left: auto;
+  }

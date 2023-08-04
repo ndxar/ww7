@@ -6,21 +6,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>WW7</h1>
-    <ul>
-        <li><a href="/">Home</a></li>
-        {% if user.is_authenticated %}
-            <li><a href="{{url_for('auth.logout')}}">Logout</a></li>
-            <li><a href="{{url_for('views.post')}}">+ post</a></li>
-            <li><a href="{{url_for('views.theme')}}">Theme</a></li>
-        {% else %}
-            <li><a href="{{url_for('auth.login')}}">Login</a></li>
-            <li><a href="{{url_for('auth.signup')}}">Signup</a></li>
-        {% endif %}
-        
-    </ul>
+    <div id="menu">
+            <a href="/">home</a>
+            {% if user.is_authenticated %}
+                <a href="{{url_for('views.post')}}">+ post</a>
+                <a href="{{url_for('views.theme')}}">theme</a>
+                <a href="{{url_for('views.settings')}}">settings</a>
+                <a href="{{url_for('auth.logout')}}">logout</a>
+            {% else %}
+                <a href="{{url_for('auth.login')}}">login</a>
+                <a href="{{url_for('auth.signup')}}">signup</a>
+            {% endif %}
+
+    </div>
     {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages%}
         {% for category, message in messages%}
@@ -29,8 +30,9 @@
     {% endif %}
     {% endwith %}
 
-    {% block content %} {% endblock %}
-
+    <div class="content">
+        {% block content %} {% endblock %}
+    </div>
 
 </body>
 </html>

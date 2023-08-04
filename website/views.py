@@ -6,6 +6,7 @@ import markdown
 from sqlalchemy import desc
 from markupsafe import Markup
 from jinja2 import Template
+from werkzeug.security import generate_password_hash, check_password_hash
 
 views = Blueprint('views', __name__)
 
@@ -62,7 +63,7 @@ def userpage(username):
 
     theme = Template(user.userTheme)
 
-    return render_template(theme, user=current_user, posts=entries, username=username)
+    return render_template(theme, posts=entries)
 
 
 
@@ -98,8 +99,9 @@ def postpage(username,url):
         flash('No hay posts de ese usuario con esa URL', category='error')
         return redirect(url_for('views.home'))
 
+    theme = Template(user.postTheme)
 
-    return render_template("postpage.html", user=current_user, post=reqPost, meta=reqMeta, username=username, url=url)
+    return render_template(theme, post=reqPost, meta=reqMeta)
 
 
 @views.route('/theme', methods=['GET','POST'])
@@ -115,3 +117,33 @@ def theme():
         flash('Updated theme :D')
 
     return render_template("theme.html", user=current_user)
+
+@views.route('/settings', methods=['GET','POST'])
+@login_required
+def settings():
+    if request.method == "POST":
+        in_email = request.form.get('email')
+        in_username = request.form.get('username')
+        in_password = request.form.get('password')
+
+        if check_password_hash(current_user.passwordHash, in_password):
+            if in_email != current_user.email:
+                email_existe = User.query.filter_by(email=in_email).first()
+                if email_existe:
+                    flash("email already in use", category="error")
+                else:
+                    current_user.email = in_email
+                    flash("email changed!",category="success")
+            
+            if in_username != current_user.username:
+                user_existe = User.query.filter_by(username=in_username).first()
+                if user_existe:
+                    flash("username already in use",category="error")
+                else:
+                    current_user.username = in_username
+                    flash("username changed!",category="success")
+            db.session.commit()
+        else:
+            flash("incorrect password",category="error")
+
+    return render_template("settings.html", user=current_user)

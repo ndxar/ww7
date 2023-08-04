@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}
+settings
+{% endblock %}
+
+
+{% block content %}
+
+<h1>settings</h1>
+
+<div class="settings">
+
+    <form class="settings" method="POST">
+        <div class="settingsrow">
+          <label for="email">email</label>
+          <input type="email" id="email" name="email" placeholder="email" value="{{user.email}}"><br><br>
+        </div>
+
+        <div class="settingsrow">
+          <label for="username" class="label">username</label>
+          <input type="text" id="username" name="username" placeholder="username" value="{{user.username}}"><br><br>
+        </div>
+
+        <div class="settingsrow">
+          <label for="password">password</label>
+          <input type="password" id="password" name="password"><br><br>
+        </div>
+        <input type="submit" value="Submit">
+      </form>
+
+</div>
+
+{% endblock %}
