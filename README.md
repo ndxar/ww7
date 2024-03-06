@@ -5,8 +5,6 @@ Plataforma de blogging hecha en Python utilizando Flask.
 
 Inspirado en [thoughts.page](https://thoughts.page/) y [Wesley's Notebook](https://notebook.wesleyac.com/).
 
-extensions folder goes into markdown extensions folder
-
 ---
 
 To-Do
