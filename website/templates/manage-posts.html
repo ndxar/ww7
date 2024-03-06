@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Gestionar entradas
+{% endblock %}
+
+
+{% block content %}
+<script>
+    function deletePopup(postId) {
+        if (confirm("Esta seguro que quiere borrar ese post?")) {
+            document.deleter.postId.value = postId;
+            document.getElementById('deleter').submit();
+        }
+    }
+
+    function editRedir(postId) {
+        document.editor.postId.value = postId;
+        document.getElementById('editor').submit();
+        }
+</script>
+
+
+<h1>Gestionar entradas</h1>
+
+    <table>
+        {% for post in posts %}
+            <tr id="{{ post.id }}">
+                <td>{{ post.creationDate.strftime('%Y-%m-%d') }}</td>
+                <td style="white-space: pre-wrap;">{{ post.content }}</td>
+                <td>
+                    <button onclick="deletePopup({{ post.id }})">Borrar</button>
+                    <button onclick="editRedir({{ post.id }})">Editar</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <form method="POST" id="deleter" name="deleter">
+        <input type="hidden" id="postId" name="postId" value="">
+    </form>
+
+    <form method="POST" action="{{url_for('views.editpost')}}" id="editor" name="editor">
+        <input type="hidden" id="postId" name="postId" value="">
+    </form>
+
+
+{% endblock %}

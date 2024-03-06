@@ -6,11 +6,11 @@ import markdown
 from sqlalchemy import desc
 from markupsafe import Markup
 from jinja2 import Template
-from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.security import check_password_hash
 
 views = Blueprint('views', __name__)
 
-parser = markdown.Markdown(extensions = ['meta'])                                           #MD PARSER
+parser = markdown.Markdown(extensions = ['meta','extra','toc','admonition','sane_lists'])                                           #MD PARSER
 
 @views.route('/')
 def home():
@@ -43,6 +43,7 @@ def post():
 
 
 @views.route('/~<username>')
+@views.route('/~<username>/')
 def userpage(username):
     user = User.query.filter_by(username=username).first()
 
@@ -63,11 +64,17 @@ def userpage(username):
 
     theme = Template(user.userTheme)
 
-    return render_template(theme, posts=entries)
+    try:
+        return render_template(theme, posts=entries,username=user.username)
+    except:
+        flash('Hubo un error cargando ese usuario.', category='error')
+        return redirect(url_for('views.home'))
+    #return render_template(theme, posts=entries,username=user.username)
 
 
 
 @views.route('/~<username>/<url>')
+@views.route('/~<username>/<url>/')
 def postpage(username,url):
     user = User.query.filter_by(username=username).first()
 
@@ -101,30 +108,45 @@ def postpage(username,url):
 
     theme = Template(user.postTheme)
 
+    try:
+        render_template(theme, post=reqPost, meta=reqMeta)
+    except:
+        flash('Hubo un error cargando este post.', category='error')
+        return redirect(url_for('views.userpage'),username=username)
+
     return render_template(theme, post=reqPost, meta=reqMeta)
 
 
 @views.route('/theme', methods=['GET','POST'])
+@views.route('/theme/', methods=['GET','POST'])
 @login_required
 def theme():
     if request.method == "POST":
-        userTheme = request.form.get('userTheme')
-        postTheme = request.form.get('postTheme')
-
-        current_user.userTheme = userTheme
-        current_user.postTheme = postTheme
-        db.session.commit()
-        flash('Updated theme :D')
+        try:
+            userTheme = request.form.get('userTheme')
+            postTheme = request.form.get('postTheme')
+            current_user.userTheme = userTheme
+            current_user.postTheme = postTheme
+            db.session.commit()
+            flash('Updated theme :D')
+        except:
+            flash("Hubo un error actualizando el tema",category="error")
 
     return render_template("theme.html", user=current_user)
 
 @views.route('/settings', methods=['GET','POST'])
+@views.route('/settings/', methods=['GET','POST'])
 @login_required
 def settings():
     if request.method == "POST":
         in_email = request.form.get('email')
         in_username = request.form.get('username')
         in_password = request.form.get('password')
+        in_webring = request.form.get('webring')
+        if in_webring == None:
+            webring = False
+        else:
+            webring = True
 
         if check_password_hash(current_user.passwordHash, in_password):
             if in_email != current_user.email:
@@ -142,8 +164,62 @@ def settings():
                 else:
                     current_user.username = in_username
                     flash("username changed!",category="success")
+
+            if webring != current_user.weBring:
+                current_user.weBring = webring
+                flash("webring changed!",category="success")
+
             db.session.commit()
         else:
             flash("incorrect password",category="error")
 
     return render_template("settings.html", user=current_user)
+
+
+@views.route('/webring')
+@views.route('/webring/')
+def webring():
+    webringUsers = User.query.filter_by(weBring=True).all()
+    print(webringUsers)
+    return render_template("webring.html", user=current_user, webringUsers=webringUsers)
+
+
+
+@views.route('/manage-posts', methods=['GET','POST'])
+@views.route('/manage-posts/', methods=['GET','POST'])
+@login_required
+def manageposts():
+    posts = Post.query.filter_by(author=current_user.id).order_by(Post.creationDate.desc()).all()
+    db.session.flush()
+    
+    if request.method=="POST":
+        postId = request.form.get('postId')
+        Post.query.filter_by(id=postId).delete()
+        db.session.commit()
+        posts = Post.query.filter_by(author=current_user.id).order_by(Post.creationDate.desc()).all()
+        db.session.flush()
+
+    return render_template("manage-posts.html", user=current_user, posts=posts)
+
+
+
+@views.route('/edit-post', methods=['GET','POST'])
+@login_required
+def editpost():
+    if request.method == "POST":
+        postId = request.form.get('postId')
+        editedContent = request.form.get('content')
+        post = Post.query.filter_by(id=postId).order_by(Post.creationDate.desc()).first()
+
+        if editedContent:  #Si hay editedContent (es none), significa que ya se editó y se quieren pushear los cambios
+            post.content = editedContent
+            db.session.commit()
+            flash("Entrada editada con éxito")
+            return redirect(url_for('views.manageposts'))
+        else:
+            return render_template('edit-post.html', user = current_user, content=post.content, postId=postId)
+
+
+    else:
+        flash("No se ha cargado ninguna entrada")
+        return redirect(url_for('views.userpage'))

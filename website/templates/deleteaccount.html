@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+settings
+{% endblock %}
+
+
+{% block content %}
+
+<h1>borrar cuenta</h1>
+
+<div class="deletion">
+
+    <h3>ESTA ACCIÓN ES TOTALMENTE IRREVERSIBLE.</h1>
+    <form class="settings" method="POST" autocomplete="off">
+        <p style="user-select: none;">El código de validación es "DEJAMEBORRARMICUENTA".</p>
+        <div class="settingsrow">
+          <label for="validation" class="label">validation code</label>
+          <input type="text" id="validation" name="validation" autocomplete="off"><br><br>
+        </div>
+
+        <div class="settingsrow">
+          <label for="password">password</label>
+          <input type="password" id="password" name="password" autocomplete="new-password"><br><br>
+        </div>
+
+        <input type="submit" value="Submit">
+      </form>
+
+      <br><br><br>
+
+      
+
+</div>
+
+{% endblock %}

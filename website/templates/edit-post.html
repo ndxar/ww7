@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Crear post
+Editar entrada
 {% endblock %}
 
 
@@ -11,19 +11,16 @@ Crear post
 
 <form method="POST">
     <div align="center">
-        <h1>Crear post :D</h1>
+        <h1>Editar post</h1>
         <p>Se usa markdown</p>
+        <input type="hidden" value="{{postId}}" name="postId" id="postId">
         <textarea name="content" id="content" class="form-control" rows="20">
-{% if content %}{{content}}{% else %}title: 
-url: 
-
-Lorem ipsum, or whatever{%endif%}</textarea>
+{% if content %}{{content}}{%endif%}</textarea>
         <br />
-        <button type="submit">Post!</button>
+        <button type="submit">Listo!</button>
     </div>
 </form>
 
 <br>
-<p>Puedes gestionar las entradas ya hechas <a href="{{url_for('views.manageposts')}}">aquí</a>.</p>
 
 {% endblock %}

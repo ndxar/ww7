@@ -3,6 +3,7 @@ from .models import User
 from . import db, views
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+import re
 
 auth = Blueprint('auth', __name__)
 
@@ -37,10 +38,13 @@ def signup():
         password1 = request.form.get('password1')
         password2 = request.form.get('password2')   
 
+        email_valido = re.match(r'[^@]+@[^@]+\.[^@]+', email)
         email_existe = User.query.filter_by(email=email).first()
         user_existe = User.query.filter_by(username=username).first()
 
-        if email_existe:
+        if not email_valido:
+            flash('Mail invalido', category='error')
+        elif email_existe:
             flash('El mal ya existe', category='error')
         elif user_existe:
             flash('El user ya existe', category='error')
@@ -70,3 +74,27 @@ def signup():
 def logout():
     logout_user()
     return render_template('logout.html', user=current_user)
+
+
+@auth.route('/delete-account',methods=['GET','POST'])
+@login_required
+def deleteaccount():
+    user=current_user
+    if request.method == "POST":
+        password = request.form.get('password')
+        validation = request.form.get('validation') == "DEJAMEBORRARMICUENTA"
+
+        if not check_password_hash(user.passwordHash, password):
+            flash("Contraseña incorrecta",category="error")
+            return redirect(url_for('views.settings'))
+        elif not validation:
+            flash("Código de validación no correcto",category="error")
+            return redirect(url_for('views.settings'))
+        else:
+            flash("EL usuario ha sido borrado con éxito:(")
+            User.query.filter_by(username=current_user.username).delete()
+            db.session.commit()
+            logout()
+            
+    return render_template('deleteaccount.html', user=current_user)
+        

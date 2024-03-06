@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+webring
+{% endblock %}
+
+{% block content %}
+
+<h1>webring</h1>
+
+<div id="webring links">
+    {% for author in webringUsers%}
+        <a href="/~{{author.username}}">{{author.username}}</a><br>
+    {% endfor %}
+</div>
+
+{% endblock %}

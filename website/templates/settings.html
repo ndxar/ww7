@@ -23,11 +23,22 @@ settings
         </div>
 
         <div class="settingsrow">
-          <label for="password">password</label>
-          <input type="password" id="password" name="password"><br><br>
+          <label for="webring">webring</label>
+          <input type="checkbox" id="webring" name="webring" {% if user.weBring == True %} checked {% endif %}><br><br>
         </div>
+
+        <div class="settingsrow">
+          <label for="password">password</label>
+          <input type="password" id="password" name="password" autocomplete="new-password"><br><br>
+        </div>
+
         <input type="submit" value="Submit">
       </form>
+
+      <br><br><br>
+
+      <button type="button" onclick="location.href= '{{url_for('auth.deleteaccount')}}'">DELETE ACCOUNT</button>
+      
 
 </div>
 

@@ -4,11 +4,11 @@ userThemeDefault = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <title>notebook</title>
+    <link rel="stylesheet" href="/static/tufte.css" type="text/css">
 </head>
 <body>
-    <h1>{{username}}</h1>
+    <h1>Notebook</h1>
 
     <div id="posts">
 
@@ -35,8 +35,8 @@ postThemeDefault = """<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
-    <link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura.css" type="text/css">
+    <title>meta.title[0]</title>
+    <link rel="stylesheet" href="/static/tufte.css" type="text/css">
 </head>
 <body>
     <div id="post">
@@ -44,13 +44,7 @@ postThemeDefault = """<!DOCTYPE html>
             <div id="post-{{post.id}}">
 
                 <div id="post-title">
-                    <h1>
-                        {% if meta.title %}
-                            {{ meta.title[0] }}
-                        {% else %}
-                            Untitled Post
-                        {% endif %}
-                    </h1>
+                    <h1>{{ meta.title[0] }}</h1>
                 </div>
                 <div id="post-date">
                     {{ post.creationDate.strftime('%a, %B %d, %Y') }}
@@ -58,7 +52,9 @@ postThemeDefault = """<!DOCTYPE html>
                 <hr>
 
                 <div id="post-content">
-                    {{post.content}}
+                    <section>
+                        {{post.content}}
+                    </section>
                 </div>
 
 

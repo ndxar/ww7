@@ -7,26 +7,24 @@ Home
 
 {% block content %}
 
-<h1>Home!!!</h1>
+<div id="intro">
 
-<div id="posts">
+    <br><br><br>
 
-    {% for post in posts %}
-        <div id="post-{{post.id}}">
+    <p>
+        Cree este sitio web para invitarte a compartir tus pensamientos, experiencias y reflexiones sin la presión de las redes sociales tradicionales. 
+    Acá no hay likes, comentarios, numeros de vistas, ni ningún tipo de interaccion.
+    </p>
+    
+    <p>
+        Podés pensarlo como un cuaderno. Es un intento de un internet más tranquilo y personal. 
+        En <a href="{{url_for('views.webring')}}">la biblioteca</a> vas a poder ver los cuadernos de aquellos que deseen compartilos :)
+    </p>
 
-            <div id="post-author">
-                <a href="/~{{ post.user.username }}"> {{ post.user.username }} </a>
-            </div>
-
-            <div id="post-content">
-                {{ post.content }}
-            </div>
-
-            <div id="post-date">
-                {{ post.creationDate }}
-            </div>
-        </div>
-    {% endfor %}
+    <p>
+        Está inspirado en <a href="https://thoughts.page">thoughts.page</a> y <a href="https://notebook.wesleyac.com/">Wesley's Notebook</a>
+        y fue perseguido hasta su ejecución como proyecto final para una materia universitaria.
+    </p>
 
 </div>
 

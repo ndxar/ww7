@@ -15,13 +15,17 @@ Theme
 
         <p>index theme</p>
         <textarea name="userTheme" id="userTheme" class="form-control" rows="30">
-{{ user.userTheme }}
+{% if errorUserTheme %}{{ errorUserTheme }}
+{% else %}{{ user.userTheme }}
+            {% endif %}
         </textarea>
         <br />
 
         <p>post theme</p>
         <textarea name="postTheme" id="postTheme" class="form-control" rows="30">
-{{ user.postTheme }}
+{% if errorUserTheme %}{{ errorPostTheme }}
+{% else %}{{ user.postTheme }}
+            {% endif %}
         </textarea>
         <br />
         <button type="submit">Update!</button>
